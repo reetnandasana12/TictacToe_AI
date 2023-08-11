@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".JoiningMultiPlayerActivity">
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="100dp"
+        android:text="code is already occupied"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,12 +30,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mode"
-            android:textSize="30dp"
+            android:layout_gravity="center"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:layout_gravity="center"
-            />
+            android:text="Mode"
+            android:textSize="30dp" />
+
         <Button
             android:id="@+id/Host"
             android:layout_width="match_parent"
@@ -36,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:text="Join Room"/>
+            android:text="Join Room" />
 
         <EditText
             android:id="@+id/editTextText"
@@ -54,6 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:text="Submit" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

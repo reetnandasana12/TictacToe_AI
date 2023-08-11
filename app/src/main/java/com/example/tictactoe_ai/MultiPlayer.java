@@ -38,7 +38,7 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
     ValueEventListener turnsEventListener;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference databaseReference = database.getReference("Game");
+    DatabaseReference databaseReference = database.getReference("Multiplayer").child("Game");
     private Button[][] buttons = new Button[3][3];
     private boolean player1Turn = true;
     private int roundCount;
@@ -88,6 +88,8 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
         editor.clear();
         editor.commit();
 
+        Toast.makeText(this, s1, Toast.LENGTH_SHORT).show();
+        Objects.requireNonNull(databaseReference.getParent()).child("Players").child(s1).setValue(true);
         turnsEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

@@ -22,16 +22,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.List;
 import java.util.Random;
 
 public class JoiningMultiPlayerActivity extends AppCompatActivity {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference databaseReference = database.getReference("Players");
+    DatabaseReference databaseReference = database.getReference("Multiplayer").child("Players");
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     String s1;
+    Boolean flag1;
 
     public int Flag = -1;
     private int x=100;
@@ -46,6 +48,7 @@ public class JoiningMultiPlayerActivity extends AppCompatActivity {
         Button b2 = findViewById(R.id.Join);
         Button b3 = findViewById(R.id.Submit_button);
         EditText e1 = findViewById(R.id.editTextText);
+        TextView t1 = findViewById(R.id.textView);
 
         sharedPreferences = getSharedPreferences("User",MODE_PRIVATE);
 
@@ -54,6 +57,7 @@ public class JoiningMultiPlayerActivity extends AppCompatActivity {
 
         e1.setVisibility(View.INVISIBLE);
         b3.setVisibility(View.INVISIBLE);
+        t1.setVisibility(View.INVISIBLE);
 
         b1.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("SetTextI18n")
@@ -84,24 +88,49 @@ public class JoiningMultiPlayerActivity extends AppCompatActivity {
 
         b3.setOnClickListener(new View.OnClickListener() {
 
-            final DatabaseReference d1 = database.getReference("Game");
+            final DatabaseReference d1 = database.getReference("Multiplayer").child("Game");
             @Override
             public void onClick(View v) {
 
+                s1 = String.valueOf(e1.getText());
 
-                if(Flag == 0) {
+                flag1 = true;
+
+                databaseReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            if (task.getResult().exists()) {
+
+                                DataSnapshot dataSnapshot = task.getResult();
+
+                                Boolean check = (Boolean) dataSnapshot.child(s1).getValue();
+
+                                //true means games is running
+                                if(Boolean.TRUE.equals(check)){
+
+                                    t1.setVisibility(View.VISIBLE);
+                                    flag1 = false;
+                                    Toast.makeText(JoiningMultiPlayerActivity.this, "true check", Toast.LENGTH_SHORT).show();
+                                }
+                                //false means game is not started
+                                else {
+                                    t1.setVisibility(View.INVISIBLE);
+                                    Toast.makeText(JoiningMultiPlayerActivity.this, "false check", Toast.LENGTH_SHORT).show();
+                                }
+
+                            }
+                        }
+
+                    }
+                });
+
+
+                if(Flag == 0 && flag1) {
 
                     //host
-
-                    // Edit text value
-                    s1 = String.valueOf(e1.getText());
-
-                    //store into sharedPreference
-
-
-                    //value store
-                    databaseReference.child(s1).setValue(s1);
-
+                    databaseReference.child(s1).setValue(false);
 
                     d1.addValueEventListener(new ValueEventListener() {
 
@@ -137,9 +166,14 @@ public class JoiningMultiPlayerActivity extends AppCompatActivity {
 
                         }
                     });
+
+
+
+
+
                 }
 
-                else {
+                else if(flag1){
 
                     //Join
 
@@ -172,7 +206,7 @@ public class JoiningMultiPlayerActivity extends AppCompatActivity {
         editor.commit();
 
 
-        final DatabaseReference d1 = database.getReference("Game");
+        final DatabaseReference d1 = database.getReference("Multiplayer").child("Game");
 
         Toast.makeText(JoiningMultiPlayerActivity.this, "yes", Toast.LENGTH_SHORT).show();
 
@@ -180,7 +214,7 @@ public class JoiningMultiPlayerActivity extends AppCompatActivity {
         d1.child(s1).child("winner").setValue(false);
         d1.child(s1).child("host").setValue(true);
         d1.child(s1).child("join").setValue(false);
-        databaseReference.child("Player").child(s1).setValue(null);
+//        databaseReference.child("Player").child(s1).setValue(null);
 
 
         Intent intent = new Intent(JoiningMultiPlayerActivity.this,MultiPlayer.class);
