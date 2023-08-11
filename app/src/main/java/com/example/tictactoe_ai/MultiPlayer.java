@@ -69,7 +69,8 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
 
     private String UserType;
 
-
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,9 +78,9 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
         setContentView(R.layout.activity_main);
 
         round = 0;
-        SharedPreferences sharedPreferences = getSharedPreferences("User",MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("User",MODE_PRIVATE);
 
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor = sharedPreferences.edit();
 
         s1 = sharedPreferences.getString("name","");
         UserType = sharedPreferences.getString("Type","");
@@ -590,6 +591,25 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
 //        Toast.makeText(this, "Player 2 wins!", Toast.LENGTH_SHORT).show();
         updatePointsText();
         resetBoard();
+    }
+
+    void clearData () {
+
+        
+            editor.clear();
+            databaseReference.child(s1).setValue(null);
+            databaseReference.getParent().child("Players").child(s1).setValue(null);
+        Toast.makeText(this, "true...", Toast.LENGTH_SHORT).show();
+
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        Toast.makeText(this, "destroy MP", Toast.LENGTH_SHORT).show();
+
+        clearData();
+
     }
 }
 

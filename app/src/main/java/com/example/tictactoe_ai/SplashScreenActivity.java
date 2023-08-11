@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,7 +24,10 @@ public class SplashScreenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash_screen_activity);
+
+        databaseReference.child("1_1").setValue(true);
 
         databaseReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -35,7 +39,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
                         DataSnapshot dataSnapshot = task.getResult();
 
-                        Boolean count = (Boolean) dataSnapshot.child("1.1").getValue();
+                        Boolean count = (Boolean) dataSnapshot.child("1_1").getValue();
 
                         if (count){
                             new Handler().postDelayed(new Runnable() {
@@ -53,12 +57,5 @@ public class SplashScreenActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
     }
-
-
-
-
 }
