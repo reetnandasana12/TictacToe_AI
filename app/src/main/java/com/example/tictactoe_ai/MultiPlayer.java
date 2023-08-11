@@ -370,13 +370,14 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
                             count1 = count1 + 1;
                             String count2 = String.valueOf(count1);
 
-                            Toast.makeText(MultiPlayer.this, host.toString(), Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(MultiPlayer.this, host.toString(), Toast.LENGTH_SHORT).show();
 
                             databaseReference.child(s1).child("Board").child(count2).child("id").setValue(b);
                             databaseReference.child(s1).child("Board").child(count2).child("value").setValue(UserType);
                             databaseReference.child(s1).child("host").setValue(join);
                             databaseReference.child(s1).child("join").setValue(host);
                             databaseReference.child(s1).child("count").setValue(count2);
+                            player1Turn = !player1Turn;
 
                             handler.postDelayed(() -> arrangeBlock(), 500);
 //                            arrangeBlock();
