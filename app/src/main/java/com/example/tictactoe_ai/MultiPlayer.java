@@ -1,12 +1,9 @@
 package com.example.tictactoe_ai;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
-import android.renderscript.Script;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,32 +13,26 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public class MultiPlayer extends AppCompatActivity implements View.OnClickListener{
 
     //for store
-    private final List<String> doneBox = new ArrayList<>();
-    public float[] arr = new float[4];
+//    private final List<String> doneBox = new ArrayList<>();
+//    public float[] arr = new float[4];
     ValueEventListener turnsEventListener;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = database.getReference("Multiplayer").child("Game");
     private Button[][] buttons = new Button[3][3];
     private boolean player1Turn = true;
-    private int roundCount;
+//    private int roundCount;
 
     public int round;
 
@@ -49,18 +40,18 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
     private int player2Points;
     private TextView textViewPlayer1;
     private TextView textViewPlayer2;
-    private String playerUniqueId;
-    private boolean opponentFound = false;
-    private String opponentUniqueId = "0";
-    private String Status = "matching";
+//    private String playerUniqueId;
+//    private boolean opponentFound = false;
+//    private String opponentUniqueId = "0";
+//    private String Status = "matching";
     private  Boolean playerTurn = true;
-    private  Boolean winner;
-    private String connectionId = "";
-    private int x=100;
+//    private  Boolean winner;
+//    private String connectionId = "";
+//    private int x=100;
 
     final Handler handler = new Handler();
 
-    private String count = " ";
+//    private String count = " ";
     private int count1 = 0;
 
     String b;
@@ -98,26 +89,23 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
 
                     if (snapshot.hasChildren()) {
 
-                        databaseReference.child(s1).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                if (task.isSuccessful()) {
+                        databaseReference.child(s1).get().addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
 
-                                    if (task.getResult().exists()) {
+                                if (task.getResult().exists()) {
 
-                                        DataSnapshot dataSnapshot = task.getResult();
+                                    DataSnapshot dataSnapshot = task.getResult();
 
-                                        if(playerTurn){
+                                    if(playerTurn){
 
-                                            player1Turn = (Boolean) dataSnapshot.child("host").getValue();
-                                        }
-                                        else {
-
-                                            player1Turn = (Boolean) dataSnapshot.child("join").getValue();
-                                        }
-                                        handler.postDelayed(() -> arrangeBlock(), 100);
-
+                                        player1Turn = (Boolean) dataSnapshot.child("host").getValue();
                                     }
+                                    else {
+
+                                        player1Turn = (Boolean) dataSnapshot.child("join").getValue();
+                                    }
+                                    handler.postDelayed(() -> arrangeBlock(), 100);
+
                                 }
                             }
                         });
@@ -150,12 +138,7 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
 
         // Button reset
         Button buttonReset = findViewById(R.id.button_reset);
-        buttonReset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                resetGame();
-            }
-        });
+        buttonReset.setOnClickListener(v -> resetGame());
 
 //        databaseReference.addValueEventListener(new ValueEventListener() {
 //            @Override
@@ -325,6 +308,8 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
 
         if (player1Turn) {
 
+//          R.id.bu
+//            Toast.makeText(this, buttonName, Toast.LENGTH_SHORT).show();
             switch (v.getId()) {
                 case R.id.button_00:
                     b = "button_00";
@@ -355,37 +340,34 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
                     break;
             }
 
-            databaseReference.child(s1).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DataSnapshot> task) {
-                    if (task.isSuccessful()) {
+            databaseReference.child(s1).get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
 
-                        if (task.getResult().exists()) {
-                            Log.d("Multiplayer", "on click: error");
+                    if (task.getResult().exists()) {
+                        Log.d("Multiplayer", "on click: error");
 
-                            DataSnapshot dataSnapshot = task.getResult();
+                        DataSnapshot dataSnapshot = task.getResult();
 
-                            String count = String.valueOf(dataSnapshot.child("count").getValue());
-                            Boolean host = (Boolean) dataSnapshot.child("host").getValue();
-                            Boolean join = (Boolean) dataSnapshot.child("join").getValue();
+                        String count = String.valueOf(dataSnapshot.child("count").getValue());
+                        Boolean host = (Boolean) dataSnapshot.child("host").getValue();
+                        Boolean join = (Boolean) dataSnapshot.child("join").getValue();
 
-                            count1 = Integer.parseInt(count);
-                            count1 = count1 + 1;
-                            String count2 = String.valueOf(count1);
+                        count1 = Integer.parseInt(count);
+                        count1 = count1 + 1;
+                        String count2 = String.valueOf(count1);
 
-                            //Toast.makeText(MultiPlayer.this, host.toString(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(MultiPlayer.this, host.toString(), Toast.LENGTH_SHORT).show();
 
-                            databaseReference.child(s1).child("Board").child(count2).child("id").setValue(b);
-                            databaseReference.child(s1).child("Board").child(count2).child("value").setValue(UserType);
-                            databaseReference.child(s1).child("host").setValue(join);
-                            databaseReference.child(s1).child("join").setValue(host);
-                            databaseReference.child(s1).child("count").setValue(count2);
-                            player1Turn = !player1Turn;
+                        databaseReference.child(s1).child("Board").child(count2).child("id").setValue(b);
+                        databaseReference.child(s1).child("Board").child(count2).child("value").setValue(UserType);
+                        databaseReference.child(s1).child("host").setValue(join);
+                        databaseReference.child(s1).child("join").setValue(host);
+                        databaseReference.child(s1).child("count").setValue(count2);
+                        player1Turn = !player1Turn;
 
-                            handler.postDelayed(() -> arrangeBlock(), 500);
+                        handler.postDelayed(this::arrangeBlock, 500);
 //                            arrangeBlock();
 
-                        }
                     }
                 }
             });
@@ -395,69 +377,65 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
 
     private void arrangeBlock() {
 
-        databaseReference.child(s1).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (task.isSuccessful()) {
+        databaseReference.child(s1).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
 
-                    if (task.getResult().exists()) {
-                        Log.d("Multiplayer", "arrange: error");
+                if (task.getResult().exists()) {
+                    Log.d("Multiplayer", "arrange: error");
 
-                        DataSnapshot dataSnapshot = task.getResult();
+                    DataSnapshot dataSnapshot = task.getResult();
 
-                        String count = String.valueOf(dataSnapshot.child("count").getValue());
-                        count1 = Integer.parseInt(count);
+                    String count = String.valueOf(dataSnapshot.child("count").getValue());
+                    count1 = Integer.parseInt(count);
 
-                        for(int i = 1 ;i<=count1;i++) {
-                            String id = Objects.requireNonNull(dataSnapshot.child("Board").child(String.valueOf(i)).child("id").getValue()).toString();
-                            String value = Objects.requireNonNull(dataSnapshot.child("Board").child(String.valueOf(i)).child("value").getValue()).toString();
+                    for (int i = 1; i <= count1; i++) {
+                        String id = Objects.requireNonNull(dataSnapshot.child("Board").child(String.valueOf(i)).child("id").getValue()).toString();
+                        String value = Objects.requireNonNull(dataSnapshot.child("Board").child(String.valueOf(i)).child("value").getValue()).toString();
 
-                            Button b1;
+                        Button b1;
 //                            buttons[0][0].setText("");
 
-                            switch (id) {
-                                case "button_00":
-                                    b1 = findViewById(R.id.button_00);
-                                    break;
-                                case "button_01":
-                                    b1 = findViewById(R.id.button_01);
-                                    break;
-                                case "button_02":
-                                    b1 = findViewById(R.id.button_02);
-                                    break;
-                                case "button_10":
-                                    b1 = findViewById(R.id.button_10);
-                                    break;
-                                case "button_11":
-                                    b1 = findViewById(R.id.button_11);
-                                    break;
-                                case "button_12":
-                                    b1 = findViewById(R.id.button_12);
-                                    break;
-                                case "button_20":
-                                    b1 = findViewById(R.id.button_20);
-                                    break;
-                                case "button_21":
-                                    b1 = findViewById(R.id.button_21);
-                                    break;
-                                default:
-                                    b1 = findViewById(R.id.button_22);
-                                    break;
-
-                            }
-
-
-                            if(value.equals("host")) {
-                                b1.setText("X");
-                            }
-                            else {
-                                b1.setText("O");
-                            }
+                        switch (id) {
+                            case "button_00":
+                                b1 = findViewById(R.id.button_00);
+                                break;
+                            case "button_01":
+                                b1 = findViewById(R.id.button_01);
+                                break;
+                            case "button_02":
+                                b1 = findViewById(R.id.button_02);
+                                break;
+                            case "button_10":
+                                b1 = findViewById(R.id.button_10);
+                                break;
+                            case "button_11":
+                                b1 = findViewById(R.id.button_11);
+                                break;
+                            case "button_12":
+                                b1 = findViewById(R.id.button_12);
+                                break;
+                            case "button_20":
+                                b1 = findViewById(R.id.button_20);
+                                break;
+                            case "button_21":
+                                b1 = findViewById(R.id.button_21);
+                                break;
+                            default:
+                                b1 = findViewById(R.id.button_22);
+                                break;
 
                         }
-                        handler.postDelayed(() -> check(count1), 100);
+
+
+                        if (value.equals("host")) {
+                            b1.setText("X");
+                        } else {
+                            b1.setText("O");
+                        }
 
                     }
+                    handler.postDelayed(() -> check(count1), 100);
+
                 }
             }
         });
@@ -554,8 +532,8 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
     // Update the text for the player scores
 
     private void updatePointsText() {
-        textViewPlayer1.setText(player1Points+ " ");
-        textViewPlayer2.setText(player2Points+ " ");
+        textViewPlayer1.setText(String.valueOf(player1Points));
+        textViewPlayer2.setText(String.valueOf(player2Points));
     }
 
     // Reset the board
@@ -567,14 +545,12 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
         databaseReference.child(s1).child("count").setValue("0");
 
         final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < 3; i++) {
-                    for (int j = 0; j < 3; j++) {
-                        buttons[i][j].setText("");
-                        buttons[i][j].setBackgroundColor(0xFFBB86FC);
-                    }
+
+        handler.postDelayed(() -> {
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    buttons[i][j].setText("");
+                    buttons[i][j].setBackgroundColor(0xFFBB86FC);
                 }
             }
         }, 3000);
@@ -600,7 +576,7 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
         
             editor.clear();
             databaseReference.child(s1).setValue(null);
-            databaseReference.getParent().child("Players").child(s1).setValue(null);
+            Objects.requireNonNull(databaseReference.getParent()).child("Players").child(s1).setValue(null);
         Toast.makeText(this, "true...", Toast.LENGTH_SHORT).show();
 
     }

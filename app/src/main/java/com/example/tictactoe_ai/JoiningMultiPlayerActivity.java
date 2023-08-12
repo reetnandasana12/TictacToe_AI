@@ -3,7 +3,6 @@ package com.example.tictactoe_ai;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,18 +12,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.EventListener;
-import java.util.List;
-import java.util.Random;
+
 
 public class JoiningMultiPlayerActivity extends AppCompatActivity {
 
@@ -36,7 +30,7 @@ public class JoiningMultiPlayerActivity extends AppCompatActivity {
     Boolean flag1;
 
     public int Flag = -1;
-    private int x=100;
+//    private final int x=100;
 
 
     @Override
@@ -59,31 +53,23 @@ public class JoiningMultiPlayerActivity extends AppCompatActivity {
         b3.setVisibility(View.INVISIBLE);
         t1.setVisibility(View.INVISIBLE);
 
-        b1.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onClick(View v) {
+        b1.setOnClickListener(v -> {
 
-                e1.setVisibility(View.VISIBLE);
-                b3.setVisibility(View.VISIBLE);
-                b2.setVisibility(View.INVISIBLE);
+            e1.setVisibility(View.VISIBLE);
+            b3.setVisibility(View.VISIBLE);
+            b2.setVisibility(View.INVISIBLE);
 
-                Flag = 0;
-            }
+            Flag = 0;
         });
 
 
-        b2.setOnClickListener(new View.OnClickListener() {
+        b2.setOnClickListener(v -> {
 
-            @Override
-            public void onClick(View v) {
+            b1.setVisibility(View.INVISIBLE);
+            e1.setVisibility(View.VISIBLE);
+            b3.setVisibility(View.VISIBLE);
 
-                b1.setVisibility(View.INVISIBLE);
-                e1.setVisibility(View.VISIBLE);
-                b3.setVisibility(View.VISIBLE);
-
-                Flag = 1;
-            }
+            Flag = 1;
         });
 
         b3.setOnClickListener(new View.OnClickListener() {
@@ -96,34 +82,31 @@ public class JoiningMultiPlayerActivity extends AppCompatActivity {
 
                 flag1 = true;
 
-                databaseReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DataSnapshot> task) {
-                        if (task.isSuccessful()) {
+                databaseReference.get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
 
-                            if (task.getResult().exists()) {
+                        if (task.getResult().exists()) {
 
-                                DataSnapshot dataSnapshot = task.getResult();
+                            DataSnapshot dataSnapshot = task.getResult();
 
-                                Boolean check = (Boolean) dataSnapshot.child(s1).getValue();
+                            Boolean check = (Boolean) dataSnapshot.child(s1).getValue();
 
-                                //true means games is running
-                                if(Boolean.TRUE.equals(check)){
+                            //true means games is running
+                            if(Boolean.TRUE.equals(check)){
 
-                                    t1.setVisibility(View.VISIBLE);
-                                    flag1 = false;
-                                    Toast.makeText(JoiningMultiPlayerActivity.this, "true check", Toast.LENGTH_SHORT).show();
-                                }
-                                //false means game is not started
-                                else {
-                                    t1.setVisibility(View.INVISIBLE);
-                                    Toast.makeText(JoiningMultiPlayerActivity.this, "false check", Toast.LENGTH_SHORT).show();
-                                }
-
+                                t1.setVisibility(View.VISIBLE);
+                                flag1 = false;
+                                Toast.makeText(JoiningMultiPlayerActivity.this, "true check", Toast.LENGTH_SHORT).show();
                             }
-                        }
+                            //false means game is not started
+                            else {
+                                t1.setVisibility(View.INVISIBLE);
+                                Toast.makeText(JoiningMultiPlayerActivity.this, "false check", Toast.LENGTH_SHORT).show();
+                            }
 
+                        }
                     }
+
                 });
 
 
@@ -141,19 +124,16 @@ public class JoiningMultiPlayerActivity extends AppCompatActivity {
 
                                 if (snapshot.hasChildren()) {
 
-                                    d1.child(s1).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                            if (task.isSuccessful()) {
+                                    d1.child(s1).get().addOnCompleteListener(task -> {
+                                        if (task.isSuccessful()) {
 
-                                                if (task.getResult().exists()) {
+                                            if (task.getResult().exists()) {
 
-                                                    if (Flag==0) {
+                                                if (Flag==0) {
 
-                                                        changeActivity(s1);
-                                                    }
-                                                    Flag=-1;
+                                                    changeActivity(s1);
                                                 }
+                                                Flag=-1;
                                             }
                                         }
                                     });
@@ -179,16 +159,13 @@ public class JoiningMultiPlayerActivity extends AppCompatActivity {
 
                     String s1 = String.valueOf(e1.getText());
 
-                    databaseReference.child(s1).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    databaseReference.child(s1).get().addOnCompleteListener(task -> {
 
-                            if (task.isSuccessful()) {
+                        if (task.isSuccessful()) {
 
-                                if (task.getResult().exists()) {
+                            if (task.getResult().exists()) {
 
-                                    changeActivity(s1);
-                                }
+                                changeActivity(s1);
                             }
                         }
                     });
