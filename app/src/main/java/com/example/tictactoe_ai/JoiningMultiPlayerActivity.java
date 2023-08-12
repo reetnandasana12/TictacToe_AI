@@ -131,6 +131,11 @@ public class JoiningMultiPlayerActivity extends AppCompatActivity {
 
                                                 if (Flag==0) {
 
+                                                    editor.putString("name",s1);
+                                                    editor.putBoolean("Turn",true);
+                                                    editor.putString("Type","host");
+                                                    editor.commit();
+
                                                     changeActivity(s1);
                                                 }
                                                 Flag=-1;
@@ -165,6 +170,11 @@ public class JoiningMultiPlayerActivity extends AppCompatActivity {
 
                             if (task.getResult().exists()) {
 
+                                editor.putString("name",s1);
+                                editor.putBoolean("Turn",false);
+                                editor.putString("Type","join");
+                                editor.commit();
+
                                 changeActivity(s1);
                             }
                         }
@@ -177,17 +187,14 @@ public class JoiningMultiPlayerActivity extends AppCompatActivity {
 
     void changeActivity(String s1){
 
-        editor.putString("name",s1);
-        editor.putBoolean("Turn",true);
-        editor.putString("Type","host");
-        editor.commit();
+
 
 
         final DatabaseReference d1 = database.getReference("Multiplayer").child("Game");
 
         Toast.makeText(JoiningMultiPlayerActivity.this, "yes", Toast.LENGTH_SHORT).show();
 
-        d1.child(s1).child("count").setValue("0");
+        d1.child(s1).child("count").child("count").setValue("0");
         d1.child(s1).child("winner").setValue(false);
         d1.child(s1).child("host").setValue(true);
         d1.child(s1).child("join").setValue(false);

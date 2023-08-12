@@ -79,7 +79,7 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
         editor.clear();
         editor.commit();
 
-        Toast.makeText(this, s1, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, s1, Toast.LENGTH_SHORT).show();
         Objects.requireNonNull(databaseReference.getParent()).child("Players").child(s1).setValue(true);
         turnsEventListener = new ValueEventListener() {
             @Override
@@ -104,6 +104,7 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
 
                                         player1Turn = (Boolean) dataSnapshot.child("join").getValue();
                                     }
+                                    //Toast.makeText(MultiPlayer.this, "arrange", Toast.LENGTH_SHORT).show();
                                     handler.postDelayed(() -> arrangeBlock(), 100);
 
                                 }
@@ -348,7 +349,7 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
 
                         DataSnapshot dataSnapshot = task.getResult();
 
-                        String count = String.valueOf(dataSnapshot.child("count").getValue());
+                        String count = String.valueOf(dataSnapshot.child("count").child("count").getValue());
                         Boolean host = (Boolean) dataSnapshot.child("host").getValue();
                         Boolean join = (Boolean) dataSnapshot.child("join").getValue();
 
@@ -362,10 +363,10 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
                         databaseReference.child(s1).child("Board").child(count2).child("value").setValue(UserType);
                         databaseReference.child(s1).child("host").setValue(join);
                         databaseReference.child(s1).child("join").setValue(host);
-                        databaseReference.child(s1).child("count").setValue(count2);
+                        databaseReference.child(s1).child("count").child("count").setValue(count2);
                         player1Turn = !player1Turn;
 
-                        handler.postDelayed(this::arrangeBlock, 500);
+                        handler.postDelayed(this::arrangeBlock, 100);
 //                            arrangeBlock();
 
                     }
@@ -375,7 +376,7 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    private void arrangeBlock() {
+    public void arrangeBlock() {
 
         databaseReference.child(s1).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -385,7 +386,7 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
 
                     DataSnapshot dataSnapshot = task.getResult();
 
-                    String count = String.valueOf(dataSnapshot.child("count").getValue());
+                    String count = String.valueOf(dataSnapshot.child("count").child("count").getValue());
                     count1 = Integer.parseInt(count);
 
                     for (int i = 1; i <= count1; i++) {
@@ -539,10 +540,6 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
     // Reset the board
     private void resetBoard() {
 
-        databaseReference.child(s1).child("Board").setValue(null);
-        databaseReference.child(s1).child("host").setValue(true);
-        databaseReference.child(s1).child("join").setValue(false);
-        databaseReference.child(s1).child("count").setValue("0");
 
         final Handler handler = new Handler();
 
@@ -553,6 +550,12 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
                     buttons[i][j].setBackgroundColor(0xFFBB86FC);
                 }
             }
+
+            databaseReference.child(s1).child("Board").setValue(null);
+            databaseReference.child(s1).child("host").setValue(true);
+            databaseReference.child(s1).child("join").setValue(false);
+            databaseReference.child(s1).child("count").child("count").setValue("0");
+
         }, 3000);
 
     }
@@ -577,14 +580,14 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
             editor.clear();
             databaseReference.child(s1).setValue(null);
             Objects.requireNonNull(databaseReference.getParent()).child("Players").child(s1).setValue(null);
-        Toast.makeText(this, "true...", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "true...", Toast.LENGTH_SHORT).show();
 
     }
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
-        Toast.makeText(this, "destroy MP", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "destroy MP", Toast.LENGTH_SHORT).show();
 
         clearData();
 
