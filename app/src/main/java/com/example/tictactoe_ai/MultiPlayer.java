@@ -21,7 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
 
-public class MultiPlayer extends AppCompatActivity implements View.OnClickListener{
+public class MultiPlayer extends AppCompatActivity implements View.OnClickListener {
 
     //for store
 //    private final List<String> doneBox = new ArrayList<>();
@@ -40,18 +40,18 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
     private int player2Points;
     private TextView textViewPlayer1;
     private TextView textViewPlayer2;
-//    private String playerUniqueId;
+    //    private String playerUniqueId;
 //    private boolean opponentFound = false;
 //    private String opponentUniqueId = "0";
 //    private String Status = "matching";
-    private  Boolean playerTurn = true;
+    private Boolean playerTurn = true;
 //    private  Boolean winner;
 //    private String connectionId = "";
 //    private int x=100;
 
     final Handler handler = new Handler();
 
-//    private String count = " ";
+    //    private String count = " ";
     private int count1 = 0;
 
     String b;
@@ -69,13 +69,13 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
         setContentView(R.layout.activity_main);
 
         round = 0;
-        sharedPreferences = getSharedPreferences("User",MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
 
         editor = sharedPreferences.edit();
 
-        s1 = sharedPreferences.getString("name","");
-        UserType = sharedPreferences.getString("Type","");
-        playerTurn = sharedPreferences.getBoolean("Turn",true);
+        s1 = sharedPreferences.getString("name", "");
+        UserType = sharedPreferences.getString("Type", "");
+        playerTurn = sharedPreferences.getBoolean("Turn", true);
         editor.clear();
         editor.commit();
 
@@ -85,7 +85,7 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                if(snapshot.exists()) {
+                if (snapshot.exists()) {
 
                     if (snapshot.hasChildren()) {
 
@@ -96,11 +96,10 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
 
                                     DataSnapshot dataSnapshot = task.getResult();
 
-                                    if(playerTurn){
+                                    if (playerTurn) {
 
                                         player1Turn = (Boolean) dataSnapshot.child("host").getValue();
-                                    }
-                                    else {
+                                    } else {
 
                                         player1Turn = (Boolean) dataSnapshot.child("join").getValue();
                                     }
@@ -141,163 +140,8 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
         Button buttonReset = findViewById(R.id.button_reset);
         buttonReset.setOnClickListener(v -> resetGame());
 
-//        databaseReference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//
-//                arrangeBlock();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
 
-//        databaseReference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//
-//                if(snapshot.exists()) {
-//
-//                    if (snapshot.hasChildren()) {
-//
-//                        arrangeBlock();
-//
-//                        databaseReference.child(s1).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<DataSnapshot> task) {
-//                                if (task.isSuccessful()) {
-//
-//                                    if (task.getResult().exists()) {
-//
-//
-//                                        DataSnapshot dataSnapshot = task.getResult();
-//
-//                                        if(playerTurn){
-//
-//                                            player1Turn = (Boolean) dataSnapshot.child("host").getValue();
-//                                        }
-//                                        else {
-//
-//                                            player1Turn = (Boolean) dataSnapshot.child("join").getValue();
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        });
-//
-//                    }
-//                }
-//
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-
-
-    // end
-
-//    databaseReference.child("connection").addValueEventListener(new ValueEventListener() {
-//        @Override
-//        public void onDataChange(@NonNull DataSnapshot snapshot) {
-//            if(opponentFound){
-//
-//                if (snapshot.hasChildren()){
-//
-//                    for (DataSnapshot connections: snapshot.getChildren()){
-//
-//                        String conId = (connections.getKey());
-//
-//                        int getPLayersCount = (int)connections.getChildrenCount();
-//
-//                        if(Status.equals("waiting")){
-//
-//                            if(getPLayersCount == 2){
-//
-////                                playerTurn = playerUniqueId;
-//
-//                                //something
-//
-//                                boolean playerFound = false;
-//
-//                                for(DataSnapshot players: connections.getChildren()){
-//
-//                                    String getPlayerUniqueId = players.getKey();
-//
-//                                    if(getPlayerUniqueId.equals(playerUniqueId)){
-//
-//                                        playerFound = true;
-//                                    }
-//                                    else if (playerFound) {
-////                                        String getOpponent
-//                                            opponentUniqueId = players.getKey();
-//
-//                                            connectionId = conId;
-//                                            opponentFound = true;
-//
-//                                        databaseReference.child("turns").child(connectionId).addValueEventListener(turnsEventListener);
-//                                        databaseReference.child("won").child(connectionId).addValueEventListener(wonEventListener);
-//
-//                                            databaseReference.child("connection").removeEventListener(this);
-//                                    }
-//                                }
-//                            }
-//                            else {
-//                                if (getPLayersCount == 1){
-//
-//                                    for (DataSnapshot players: connections.getChildren()){
-//
-//                                        opponentUniqueId = players.getKey();
-//
-////                                        playerTurn = opponentUniqueId;
-//
-//                                        //something for player turn
-//
-//                                        connectionId = conId;
-//                                        opponentFound = true;
-//
-//
-//                                        databaseReference.child("turns").child(connectionId).addValueEventListener(turnsEventListener);
-//                                        databaseReference.child("won").child(connectionId).addValueEventListener(wonEventListener);
-//
-//                                        databaseReference.child("connection").removeEventListener(this);
-//
-//                                        break;
-//                                    }
-//                                }
-//                            }
-//                        }
-//                        if(!opponentFound && !Status.equals("waiting")){
-//
-//                            String connectionUniqueID = String.valueOf(System.currentTimeMillis());
-//
-//                            snapshot.child(connectionUniqueID).child(playerUniqueId).child("player_name").getRef().setValue("reet");
-//
-//                            Status = "waiting";
-//                        }
-//                    }
-//                }
-//                else {
-//                    String connectionUniqueID = String.valueOf(System.currentTimeMillis());
-//
-//                    snapshot.child(connectionUniqueID).child(playerUniqueId).child("player_name").getRef().setValue("reet");
-//
-//                    Status = "waiting";
-//                }
-//            }
-//        }
-//
-//        @Override
-//        public void onCancelled(@NonNull DatabaseError error) {
-//
-//        }
-//    });
-
+        // end
 
     }
 
@@ -309,8 +153,6 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
 
         if (player1Turn) {
 
-//          R.id.bu
-//            Toast.makeText(this, buttonName, Toast.LENGTH_SHORT).show();
             switch (v.getId()) {
                 case R.id.button_00:
                     b = "button_00";
@@ -357,8 +199,6 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
                         count1 = count1 + 1;
                         String count2 = String.valueOf(count1);
 
-                        //Toast.makeText(MultiPlayer.this, host.toString(), Toast.LENGTH_SHORT).show();
-
                         databaseReference.child(s1).child("Board").child(count2).child("id").setValue(b);
                         databaseReference.child(s1).child("Board").child(count2).child("value").setValue(UserType);
                         databaseReference.child(s1).child("host").setValue(join);
@@ -367,7 +207,6 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
                         player1Turn = !player1Turn;
 
                         handler.postDelayed(this::arrangeBlock, 100);
-//                            arrangeBlock();
 
                     }
                 }
@@ -394,7 +233,6 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
                         String value = Objects.requireNonNull(dataSnapshot.child("Board").child(String.valueOf(i)).child("value").getValue()).toString();
 
                         Button b1;
-//                            buttons[0][0].setText("");
 
                         switch (id) {
                             case "button_00":
@@ -443,8 +281,7 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
 
     }
 
-    private void check(int count)
-    {
+    private void check(int count) {
 
         Log.d("Multiplayer", "check: error");
         if (checkForWin()) {
@@ -540,7 +377,6 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
     // Reset the board
     private void resetBoard() {
 
-
         final Handler handler = new Handler();
 
         handler.postDelayed(() -> {
@@ -555,14 +391,13 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
             databaseReference.child(s1).child("host").setValue(true);
             databaseReference.child(s1).child("join").setValue(false);
             databaseReference.child(s1).child("count").child("count").setValue("0");
-
         }, 3000);
 
     }
 
     // Draw the game
     private void draw() {
-//        Toast.makeText(this, "Draw!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Draw!", Toast.LENGTH_SHORT).show();
         resetBoard();
     }
 
@@ -574,23 +409,16 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
         resetBoard();
     }
 
-    void clearData () {
-
-        
-            editor.clear();
-            databaseReference.child(s1).setValue(null);
-            Objects.requireNonNull(databaseReference.getParent()).child("Players").child(s1).setValue(null);
-        //Toast.makeText(this, "true...", Toast.LENGTH_SHORT).show();
-
+    void clearData() {
+        editor.clear();
+        databaseReference.child(s1).setValue(null);
+        Objects.requireNonNull(databaseReference.getParent()).child("Players").child(s1).setValue(null);
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        //Toast.makeText(this, "destroy MP", Toast.LENGTH_SHORT).show();
-
         clearData();
-
     }
 }
 

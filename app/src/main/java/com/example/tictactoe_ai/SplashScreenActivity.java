@@ -35,7 +35,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                     Boolean count = (Boolean) dataSnapshot.child("1_1").getValue();
 
                     if (Boolean.TRUE.equals(count)){
-                        new Handler().postDelayed(() -> startActivity(new Intent(SplashScreenActivity.this,MainActivity2.class)),10);
+                        new Handler().postDelayed(() -> startActivity(new Intent(SplashScreenActivity.this,MainActivity2.class)),1000);
                     }
                     else {
                         Toast.makeText(SplashScreenActivity.this, "New Version is available Update", Toast.LENGTH_LONG).show();
