@@ -103,16 +103,12 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
 
                                         player1Turn = (Boolean) dataSnapshot.child("join").getValue();
                                     }
-                                    //Toast.makeText(MultiPlayer.this, "arrange", Toast.LENGTH_SHORT).show();
                                     handler.postDelayed(() -> arrangeBlock(), 100);
-
                                 }
                             }
                         });
-
                     }
                 }
-
             }
 
             @Override
@@ -204,9 +200,6 @@ public class MultiPlayer extends AppCompatActivity implements View.OnClickListen
                         databaseReference.child(s1).child("host").setValue(join);
                         databaseReference.child(s1).child("join").setValue(host);
                         databaseReference.child(s1).child("count").child("count").setValue(count2);
-                        player1Turn = !player1Turn;
-
-                        handler.postDelayed(this::arrangeBlock, 100);
 
                     }
                 }
